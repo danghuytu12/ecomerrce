@@ -6,20 +6,12 @@ import Loading from '../utils/loading/Loading'
 import axios from 'axios'
 import Filters from './Filters'
 import LoadMore from './LoadMore'
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { isEmpty } from "lodash";
 
 
 function Products() {
     const state = useContext(GlobalState)
     const [products, setProducts] = state.productsAPI.products
-    console.log("products", products);
     const [isAdmin] = state.userAPI.isAdmin
     const [token] = state.token
     const [callback, setCallback] = state.productsAPI.callback
@@ -83,15 +75,22 @@ function Products() {
             <div className="products">
                 {
                     products.map(product => {
-                        return <ProductItem key={product._id} product={product}
-                            isAdmin={isAdmin} deleteProduct={deleteProduct} handleCheck={handleCheck} />
+                        console.log('product',products)
+                        return(
+                                <ProductItem key={product._id} product={product}
+                                isAdmin={isAdmin} deleteProduct={deleteProduct} handleCheck={handleCheck} />
+                            )
                     })
-
                 }
+                {(isEmpty(products)) &&  (
+                <div >
+                  Data Not Found
+                </div>
+              )}
             </div>
 
             <LoadMore />
-            {products.length === 0 && <Loading />}
+            {/* {products.length === 0 && <Loading />} */}
         </>
     )
 }
