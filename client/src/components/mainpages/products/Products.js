@@ -89,7 +89,7 @@ function Products() {
               )}
             </div>
 
-            <LoadMore />
+            {/* <LoadMore /> */}
             {/* {products.length === 0 && <Loading />} */}
         </>
     )
