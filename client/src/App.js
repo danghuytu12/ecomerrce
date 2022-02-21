@@ -12,7 +12,6 @@ function App() {
         <div className="App">
           <Header />
           <MainPages />
-          <div>a</div>
         </div>
       </Router>
     </DataProvider>
