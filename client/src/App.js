@@ -12,7 +12,7 @@ function App() {
         <div className="App">
           <Header />
           <MainPages />
-          
+          <div>avcc</div>
         </div>
       </Router>
     </DataProvider>
