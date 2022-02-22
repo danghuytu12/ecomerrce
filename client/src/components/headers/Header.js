@@ -12,12 +12,11 @@ import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import Input from '@mui/material/Input';
 import Login from "../mainpages/auth/Login";
 const style = {
@@ -30,9 +29,11 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-  };
+};
 
 function Header() {
+
+
     const state = useContext(GlobalState)
     const [isLogged] = state.userAPI.isLogged
     const [isAdmin] = state.userAPI.isAdmin
@@ -70,6 +71,17 @@ function Header() {
 
     const styleMenu = {
         left: menu ? 0 : "-100%"
+    }
+    const [categories] = state.categoriesAPI.categories
+
+    const [category, setCategory] = state.productsAPI.category
+    const [sort, setSort] = state.productsAPI.sort
+    const [search, setSearch] = state.productsAPI.search
+
+
+    const handleCategory = e => {
+        setCategory(e.target.value)
+        setSearch('')
     }
 
     return (
@@ -111,7 +123,7 @@ function Header() {
 
         // </header>
         <Grid xs={12} container style={{ padding: "0px 10px 0px 10px", display: 'flex', alignItems: 'center' }}>
-            <Grid xs={8} style={{ display: "flex" }}>
+            <Grid xs={5} style={{ display: "flex" }}>
                 <div style={{ display: "flex" }}>
                     <Link to="/">
                         {
@@ -138,17 +150,76 @@ function Header() {
                         </li>
 
                     </ul>
-                   
+
                 </div>
             </Grid >
-            <Grid xs={4} style={{ display: "flex" }}>
+            <Grid xs={7} style={{ display: "flex" , alignItems: 'center'}}>
+                <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
+                    {/* <select name="category" value={category} onChange={handleCategory} >
+                        <option value=''>All Products</option>
+                        {
+                            categories.map(category => (
+                                <option value={"category=" + category._id} key={category._id}>
+                                    {category.name}
+                                </option>
+                            ))
+                        }
+                    </select> */}
+                    <Box sx={{ minWidth: 140 }}>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Products</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={category}
+                                label="All Products"
+                                onChange={handleCategory}
+                            >
+                                {
+                                    categories.map(category => (
+                                        <MenuItem value={"category=" + category._id} key={category._id}>
+                                            {category.name}
+                                        </MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </FormControl>
+                    </Box>
+                </div>
                 <div
                     style={{
                         width: '250px', height: "40px", backgroundColor: "#f6f6f6", borderRadius: 20, display: 'flex',
                         alignItems: "center"
                     }}>
                     <SearchOutlinedIcon style={{ marginLeft: '10px' }} />
-                    <Input style={{ marginLeft: 10 }} placeholder="Bạn tìm gì...." />
+                    <Input style={{ marginLeft: 10 }} placeholder="Bạn tìm gì...." value={search}
+                        onChange={e => setSearch(e.target.value.toLowerCase())} />
+                </div>
+                <div className="row sort" style={{ display: 'flex', alignItems: 'center' }}>
+                    {/* <select value={sort} onChange={e => setSort(e.target.value)} >
+                        <option value=''>Newest</option>
+                        <option value='sort=oldest'>Oldest</option>
+                        <option value='sort=-sold'>Best sales</option>
+                        <option value='sort=-price'>Price: Hight-Low</option>
+                        <option value='sort=price'>Price: Low-Hight</option>
+                    </select> */}
+                    <Box sx={{ minWidth: 140 }}>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Sort by</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={sort} onChange={e => setSort(e.target.value)}
+
+                            >
+                                <MenuItem value=''>Newest</MenuItem>
+                                <MenuItem value='sort=oldest'>Oldest</MenuItem>
+                                <MenuItem value='sort=-sold'>Best sales</MenuItem>
+                                <MenuItem value='sort=-price'>Price: Hight-Low</MenuItem>
+                                <MenuItem value='sort=price'>Price: Low-Hight</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
                 </div>
                 <div style={{ display: 'flex', marginLeft: "30px", alignItems: "center" }}>
                     <StorefrontOutlinedIcon style={{ width: "30px", height: "30px" }} />
@@ -159,7 +230,7 @@ function Header() {
 
                     {
                         isAdmin ? ''
-                            : <div className="cart-icon" style={{ marginLeft: "10px" }}>
+                            : <div className="cart-icon" style={{ marginLeft: "25px" }}>
                                 <span>{cart.length}</span>
                                 <Link to="/cart">
                                     <img src={Cart} alt="" width="30" />
