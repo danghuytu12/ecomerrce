@@ -12,6 +12,25 @@ import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Input from '@mui/material/Input';
+import Login from "../mainpages/auth/Login";
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
 function Header() {
     const state = useContext(GlobalState)
@@ -45,7 +64,9 @@ function Header() {
             </>
         )
     }
-
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     const styleMenu = {
         left: menu ? 0 : "-100%"
@@ -89,9 +110,9 @@ function Header() {
         // }
 
         // </header>
-        <Grid xs={12} container style={{ padding: "20px", display: 'flex', alignItems: 'center' }}>
-            <Grid xs={9} style={{display:"flex"}}>
-                <div style={{display:"flex"}}>
+        <Grid xs={12} container style={{ padding: "0px 10px 0px 10px", display: 'flex', alignItems: 'center' }}>
+            <Grid xs={8} style={{ display: "flex" }}>
+                <div style={{ display: "flex" }}>
                     <Link to="/">
                         {
                             isAdmin ? (
@@ -103,7 +124,7 @@ function Header() {
                             )
                         }
                     </Link>
-                    <ul style={styleMenu} style={{display:'flex',alignItems:'center'}}>
+                    <ul style={styleMenu} style={{ display: 'flex', alignItems: 'center' }}>
                         <li><Link to="/">{isAdmin ? 'Products' : 'Shop'}</Link></li>
 
                         {isAdmin && adminRouter()}
@@ -117,20 +138,25 @@ function Header() {
                         </li>
 
                     </ul>
+                   
                 </div>
             </Grid >
-            <Grid xs={3} style={{ display: "flex" }}>
+            <Grid xs={4} style={{ display: "flex" }}>
                 <div
                     style={{
                         width: '250px', height: "40px", backgroundColor: "#f6f6f6", borderRadius: 20, display: 'flex',
                         alignItems: "center"
                     }}>
                     <SearchOutlinedIcon style={{ marginLeft: '10px' }} />
+                    <Input style={{ marginLeft: 10 }} placeholder="Bạn tìm gì...." />
                 </div>
-                <div style={{ display: 'flex', marginLeft: "20px", alignItems: "center" }}>
+                <div style={{ display: 'flex', marginLeft: "30px", alignItems: "center" }}>
                     <StorefrontOutlinedIcon style={{ width: "30px", height: "30px" }} />
-                    <FavoriteBorderOutlinedIcon style={{ width: "30px", height: "30px", marginLeft: "10px" }} />
-                    <AccountCircleOutlinedIcon style={{ width: "30px", height: "30px", marginLeft: "10px" }} />
+                    <FavoriteBorderOutlinedIcon style={{ width: "30px", height: "30px", marginLeft: "25px" }} />
+                    {
+                        isLogged ? loggedRouter() : <Link to="/login"><AccountCircleOutlinedIcon style={{ width: "30px", height: "30px", marginLeft: "25px" }} /></Link>
+                    }
+
                     {
                         isAdmin ? ''
                             : <div className="cart-icon" style={{ marginLeft: "10px" }}>
