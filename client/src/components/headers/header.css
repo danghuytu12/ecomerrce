@@ -40,3 +40,9 @@ header ul li:hover{
     padding: 5px 7px;
     font-size: 10px;
 }
+.search{
+    width:'200px';
+    height:"40px";
+    background-color:red;
+    border-radius: 40px;
+}
