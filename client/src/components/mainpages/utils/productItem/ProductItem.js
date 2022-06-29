@@ -1,46 +1,25 @@
 import React from 'react'
-import BtnRender from './BtnRender'
-import Tooltip from '@mui/material/Tooltip';
-import Grid from '@mui/material/Grid';
-function ProductItem({ product, isAdmin, deleteProduct, handleCheck }) {
-
+import { Link } from 'react-router-dom'
+function ProductItem({product}) {
+    console.log('product',product)
     return (
         <div className="product_card">
-            {
-                isAdmin && <input type="checkbox" checked={product.checked}
-                    onChange={() => handleCheck(product._id)} />
-            }
-            <img src={product.images.url} alt="" />
+            <img src={product.images[0].url} alt=""/>
 
             <div className="product_box">
-                <Tooltip
-                    placement='bottom-start'
-                    title={(
-                        <span className='customToolTipM'>
-                            {product.title}
-                        </span>
-                    )}
-                >
-                    <h2 className="title" style={{textAlign:'center'}}>
-                        {product.title}
-                    </h2>
-                </Tooltip>
-                {/* <h2 title={product.title}>{product.title}</h2> */}
-                <Tooltip title={(
-                    <span className='customToolTipM'>Giá sản phẩm: $ {product.price}</span>
-                )}>
-                    <span>Giá sản phẩm: $ {product.price}</span>
-                </Tooltip>
-                {/* <span>${product.price}</span> */}
-                <Tooltip title={(
-                    <p className='customToolTipM'>{product.description}</p>
-                )}>
-                    <p className='webkit--one-line'>{product.description}</p>
-                </Tooltip>
+                <h2 title={product.title}>{product.title}</h2>
+                <span>${product.price}</span>
+                <p>{product.description}</p>
             </div>
 
-
-            <BtnRender product={product} deleteProduct={deleteProduct} />
+            <div className="row_btn">
+                <Link id="btn_buy" to="#!">
+                    Buy
+                </Link>
+                <Link id="btn_view" to={`detail/${product._id}`}>
+                    View
+                </Link>
+            </div>
         </div>
     )
 }
