@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './loading.css'
 
 function Loading() {
+    const [loading,setloading]=useState(false);
     return (
         <div className="load-page">
             <div className="loader">

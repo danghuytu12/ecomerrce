@@ -1,13 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import axios from 'axios'
-import { GlobalState } from '../../../GlobalState'
+import {GlobalState} from '../../../GlobalState'
 import Loading from '../utils/loading/Loading'
-import { useHistory, useParams } from 'react-router-dom'
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import {useHistory, useParams} from 'react-router-dom'
 
 const initialState = {
     product_id: '',
@@ -35,36 +30,36 @@ function CreateProduct() {
 
     const [products] = state.productsAPI.products
     const [onEdit, setOnEdit] = useState(false)
-    const [callback, setCallback] = state.productsAPI.callback
+    // const [callback, setCallback] = state.productsAPI.callback
 
     useEffect(() => {
-        if (param.id) {
+        if(param.id){
             setOnEdit(true)
             products.forEach(product => {
-                if (product._id === param.id) {
+                if(product._id === param.id) {
                     setProduct(product)
                     setImages(product.images)
                 }
             })
-        } else {
+        }else{
             setOnEdit(false)
             setProduct(initialState)
             setImages(false)
         }
     }, [param.id, products])
 
-    const handleUpload = async e => {
+    const handleUpload = async e =>{
         e.preventDefault()
         try {
-            if (!isAdmin) return alert("You're not an admin")
+            if(!isAdmin) return alert("You're not an admin")
             const file = e.target.files[0]
+            
+            if(!file) return alert("File not exist.")
 
-            if (!file) return alert("File not exist.")
-
-            if (file.size > 1024 * 1024) // 1mb
+            if(file.size > 1024 * 1024) // 1mb
                 return alert("Size too large!")
 
-            if (file.type !== 'image/jpeg' && file.type !== 'image/png') // 1mb
+            if(file.type !== 'image/jpeg' && file.type !== 'image/png') // 1mb
                 return alert("File format is incorrect.")
 
             let formData = new FormData()
@@ -72,7 +67,7 @@ function CreateProduct() {
 
             setLoading(true)
             const res = await axios.post('/api/upload', formData, {
-                headers: { 'content-type': 'multipart/form-data', Authorization: token }
+                headers: {'content-type': 'multipart/form-data', Authorization: token}
             })
             setLoading(false)
             setImages(res.data)
@@ -84,10 +79,10 @@ function CreateProduct() {
 
     const handleDestroy = async () => {
         try {
-            if (!isAdmin) return alert("You're not an admin")
+            if(!isAdmin) return alert("You're not an admin")
             setLoading(true)
-            await axios.post('/api/destroy', { public_id: images.public_id }, {
-                headers: { Authorization: token }
+            await axios.post('/api/destroy', {public_id: images.public_id}, {
+                headers: {Authorization: token}
             })
             setLoading(false)
             setImages(false)
@@ -96,27 +91,27 @@ function CreateProduct() {
         }
     }
 
-    const handleChangeInput = e => {
-        const { name, value } = e.target
-        setProduct({ ...product, [name]: value })
+    const handleChangeInput = e =>{
+        const {name, value} = e.target
+        setProduct({...product, [name]:value})
     }
 
-    const handleSubmit = async e => {
+    const handleSubmit = async e =>{
         e.preventDefault()
         try {
-            if (!isAdmin) return alert("You're not an admin")
-            if (!images) return alert("No Image Upload")
+            if(!isAdmin) return alert("You're not an admin")
+            if(!images) return alert("No Image Upload")
 
-            if (onEdit) {
-                await axios.put(`/api/products/${product._id}`, { ...product, images }, {
-                    headers: { Authorization: token }
+            if(onEdit){
+                await axios.put(`/api/products/${product._id}`, {...product, images}, {
+                    headers: {Authorization: token}
                 })
-            } else {
-                await axios.post('/api/products', { ...product, images }, {
-                    headers: { Authorization: token }
+            }else{
+                await axios.post('/api/products', {...product, images}, {
+                    headers: {Authorization: token}
                 })
             }
-            setCallback(!callback)
+            // setCallback(!callback)
             history.push("/")
         } catch (err) {
             alert(err.response.data.msg)
@@ -129,51 +124,51 @@ function CreateProduct() {
     return (
         <div className="create_product">
             <div className="upload">
-                <input type="file" name="file" id="file_up" onChange={handleUpload} />
+                <input type="file" name="file" id="file_up" onChange={handleUpload}/>
                 {
                     loading ? <div id="file_img"><Loading /></div>
 
-                        : <div id="file_img" style={styleUpload}>
-                            <img src={images ? images.url : ''} alt="" />
-                            <span onClick={handleDestroy}>X</span>
-                        </div>
+                    :<div id="file_img" style={styleUpload}>
+                        <img src={images ? images.url : ''} alt=""/>
+                        <span onClick={handleDestroy}>X</span>
+                    </div>
                 }
-
+                
             </div>
 
             <form onSubmit={handleSubmit}>
                 <div className="row">
-                    <label htmlFor="product_id" style={{ fontWeight: "bold" }}>Product ID</label>
+                    <label htmlFor="product_id">Product ID</label>
                     <input type="text" name="product_id" id="product_id" required
-                        value={product.product_id} onChange={handleChangeInput} disabled={onEdit} />
+                    value={product.product_id} onChange={handleChangeInput} disabled={onEdit} />
                 </div>
 
                 <div className="row">
-                    <label htmlFor="title" style={{ fontWeight: "bold" }}>Title</label>
+                    <label htmlFor="title">Title</label>
                     <input type="text" name="title" id="title" required
-                        value={product.title} onChange={handleChangeInput} />
+                    value={product.title} onChange={handleChangeInput} />
                 </div>
 
                 <div className="row">
-                    <label htmlFor="price" style={{ fontWeight: "bold" }}>Price</label>
+                    <label htmlFor="price">Price</label>
                     <input type="number" name="price" id="price" required
-                        value={product.price} onChange={handleChangeInput} />
+                    value={product.price} onChange={handleChangeInput} />
                 </div>
 
                 <div className="row">
-                    <label htmlFor="description" style={{ fontWeight: "bold" }}>Description</label>
+                    <label htmlFor="description">Description</label>
                     <textarea type="text" name="description" id="description" required
-                        value={product.description} rows="5" onChange={handleChangeInput} style={{ fontSize: '16px' }} />
+                    value={product.description} rows="5" onChange={handleChangeInput} />
                 </div>
 
                 <div className="row">
-                    <label htmlFor="content" style={{ fontWeight: "bold" }}>Content</label>
+                    <label htmlFor="content">Content</label>
                     <textarea type="text" name="content" id="content" required
-                        value={product.content} rows="7" onChange={handleChangeInput} style={{ fontSize: '16px' }} />
+                    value={product.content} rows="7" onChange={handleChangeInput} />
                 </div>
 
                 <div className="row">
-                    <label htmlFor="categories" style={{ fontWeight: "bold" }}>Categories: </label>
+                    <label htmlFor="categories">Categories: </label>
                     <select name="category" value={product.category} onChange={handleChangeInput} >
                         <option value="">Please select a category</option>
                         {
@@ -184,10 +179,9 @@ function CreateProduct() {
                             ))
                         }
                     </select>
-
                 </div>
 
-                <button type="submit">{onEdit ? "Update" : "Create"}</button>
+                <button type="submit">{onEdit? "Update" : "Create"}</button>
             </form>
         </div>
     )
